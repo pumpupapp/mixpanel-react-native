@@ -1087,37 +1087,27 @@ MixpanelLib.prototype._send_request = function(url, data, callback) {
     data['_'] = new Date().getTime().toString();
     url += '?' + _.HTTPBuildQuery(data);
 
-    try {
-        var req = new XMLHttpRequest();
-        req.open('GET', url, true);
-        req.withCredentials = true;
-        req.onreadystatechange = function () {
-            if (req.readyState === 4) { // XMLHttpRequest.DONE == 4, except in safari 4
-                if (req.status === 200) {
-                    if (callback) {
-                        if (verbose_mode) {
-                            callback(_.JSONDecode(req.responseText));
-                        } else {
-                            callback(Number(req.responseText));
-                        }
-                    }
+    return fetch(url, { credentials: 'include' })
+        .then(response => response.json().then((result) => {
+            if (response.ok) {
+                if (callback) {
+                    callback(result);
+                }
+                return
+            }
+            var error = 'Bad HTTP status: ' + response.status + ' ' + response.statusText;
+            console$1.error(error);
+            if (callback) {
+                if (verbose_mode) {
+                    callback({status: 0, error: error});
                 } else {
-                    var error = 'Bad HTTP status: ' + req.status + ' ' + req.statusText;
-                    console$1.error(error);
-                    if (callback) {
-                        if (verbose_mode) {
-                            callback({status: 0, error: error});
-                        } else {
-                            callback(0);
-                        }
-                    }
+                    callback(0);
                 }
             }
-        };
-        req.send(null);
-    } catch (e) {
-        console$1.error(e);
-    }
+        }))
+        .catch((err) => {
+            console$1.error(err);
+        });
 };
 
 /**
@@ -1272,13 +1262,11 @@ MixpanelLib.prototype.track = function(event_name, properties, callback) {
 
     console$1.log('MIXPANEL REQUEST: %o', truncated_data);
 
-    this._send_request(
+    return this._send_request(
         this.get_config('api_host') + '/track/',
         { 'data': encoded_data },
         this._prepare_callback(callback, truncated_data)
     );
-
-    return truncated_data;
 };
 
 /**
@@ -2117,6 +2105,14 @@ var override_mp_init_func = function() {
             }
             extend_mp();
         }
+
+        // HACK: Return a promise that resolves after a few milliseconds to
+        //       allow enough time for React Native to retrieve the locally
+        //       cached distinct_id. Events can safely be tracked once this
+        //       promise resolves.
+        return new Promise((resolve, reject) => {
+          setTimeout(resolve, 10)
+        })
     };
 };
 
