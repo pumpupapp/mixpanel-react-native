@@ -1,2 +1,2 @@
 # mixpanel-react-native
-Unofficial Mixpanel React native Client Library
+Unofficial Mixpanel React Native Client Library
