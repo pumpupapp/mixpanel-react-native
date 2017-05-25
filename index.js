@@ -1897,19 +1897,17 @@ MixpanelPeople.prototype._send_request = function(data, callback) {
                 callback(-1);
             }
         }
-        return truncated_data;
+        return Promise.reject();
     }
 
     console$1.log('MIXPANEL PEOPLE REQUEST:');
     console$1.log(truncated_data);
 
-    this._mixpanel._send_request(
+    return this._mixpanel._send_request(
         this._get_config('api_host') + '/engage/',
         {'data': encoded_data},
         this._mixpanel._prepare_callback(callback, truncated_data)
     );
-
-    return truncated_data;
 };
 
 MixpanelPeople.prototype._get_config = function(conf_var) {
