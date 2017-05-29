@@ -388,7 +388,7 @@ _.utf8Encode = function(string) {
 
 // https://stackoverflow.com/a/8809472/1360105
 _.UUID = function() {
-    var d = Date.now() + performance.now();
+    var d = Date.now();
     return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
         var r = (d + Math.random() * 16) % 16 | 0;
         d = Math.floor(d / 16);
