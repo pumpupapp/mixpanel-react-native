@@ -1897,7 +1897,7 @@ MixpanelPeople.prototype._send_request = function(data, callback) {
                 callback(-1);
             }
         }
-        return Promise.reject();
+        return Promise.resolve();
     }
 
     console$1.log('MIXPANEL PEOPLE REQUEST:');
