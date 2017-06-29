@@ -7,7 +7,7 @@
   "author": "PumpUp",
   "license": "MIT",
   "dependencies": {
-    "react-native": "0.44.0",
+    "react-native": "0.42.0",
     "react-native-device-info": "0.10.2"
   }
 }
