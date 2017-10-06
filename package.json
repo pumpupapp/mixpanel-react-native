@@ -6,8 +6,14 @@
   "repository": "http://github.com/pumpupapp/mixpanel-react-native",
   "author": "PumpUp",
   "license": "MIT",
+  "peerDependencies": {
+    "react-native": ">=0.40.0"
+  },
   "dependencies": {
-    "react-native": "0.42.3",
-    "react-native-device-info": "0.10.2"
+    "react-native-device-info": "0.9.7"
+  },
+  "devDependencies": {
+    "react-native": "^0.40.0",
+    "react": "~15.4.2"
   }
 }
